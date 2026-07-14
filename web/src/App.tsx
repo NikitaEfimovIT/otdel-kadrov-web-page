@@ -36,7 +36,30 @@ async function loadAll(): Promise<SiteData> {
     getGuild(), getRaidProgress(), getNews(), getActivePoll(),
     getPollArchive(), getLinks(), getRoles(), getRequirements(),
   ]);
+  // hero-плитки «текущий рейд» и «Mythic+» берём из живого прогресса,
+  // чтобы они совпадали с секцией «Прогресс», а не висели статикой.
+  guild.hero = deriveHero(guild, raidProgress);
   return { guild, raidProgress, news, poll, archive, links, roles, requirements };
+}
+
+function deriveHero(guild: GuildSettings, rp: RaidProgress): GuildSettings["hero"] {
+  const mythic =
+    rp.difficulties.find((d) => d.name.toLowerCase() === "mythic") ??
+    rp.difficulties[rp.difficulties.length - 1];
+  const pct =
+    mythic && mythic.total > 0
+      ? Math.round((mythic.killed / mythic.total) * 100)
+      : guild.hero.currentRaid.pct;
+  return {
+    currentRaid: {
+      value: mythic ? `${mythic.killed}/${mythic.total}` : guild.hero.currentRaid.value,
+      sub: `Mythic · ${rp.raidName}`,
+      pct,
+    },
+    mplus: { value: rp.mplus.rating, sub: `RIO · лучший ${rp.mplus.bestKey}` },
+    staff: guild.hero.staff,
+    recruit: { value: guild.recruitingOpen ? "Открыт" : "Пауза", sub: guild.hero.recruit.sub },
+  };
 }
 
 export default function App() {
