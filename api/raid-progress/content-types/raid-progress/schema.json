@@ -1,0 +1,42 @@
+{
+  "kind": "singleType",
+  "collectionName": "raid-progresses",
+  "info": {
+    "singularName": "raid-progress",
+    "pluralName": "raid-progresses",
+    "displayName": "Raid Progress"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "raidName": {
+      "type": "string",
+      "default": "Manaforge Omega"
+    },
+    "updatedLabel": {
+      "type": "string",
+      "default": "обновлено сегодня"
+    },
+    "difficulties": {
+      "type": "json"
+    },
+    "bosses": {
+      "type": "json"
+    },
+    "mplusBestKey": {
+      "type": "string"
+    },
+    "mplusRating": {
+      "type": "string"
+    },
+    "mplusKeysThisSeason": {
+      "type": "string"
+    }
+  }
+}

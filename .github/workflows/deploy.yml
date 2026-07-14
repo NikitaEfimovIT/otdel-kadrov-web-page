@@ -31,6 +31,10 @@ jobs:
         working-directory: web
       - run: npm run build
         working-directory: web
+        env:
+          # URL API Strapi из переменных репозитория (Settings → Actions → Variables).
+          # Если добавил как Secret, замени vars на secrets.
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

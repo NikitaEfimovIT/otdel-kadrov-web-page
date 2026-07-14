@@ -7,6 +7,9 @@ WORKDIR /opt/app
 COPY package*.json ./
 RUN npm install --no-audit --no-fund
 COPY . .
+# Больше heap под сборку админки Strapi — иначе OOM на маленьких VM.
+# Работает вместе со swap на хосте (см. DEPLOY-yandex-cloud.md, шаг 6).
+ENV NODE_OPTIONS=--max-old-space-size=3072
 RUN npm run build
 
 FROM node:20-alpine
