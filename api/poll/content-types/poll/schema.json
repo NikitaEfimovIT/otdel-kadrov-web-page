@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "polls",
+  "info": {
+    "singularName": "poll",
+    "pluralName": "polls",
+    "displayName": "Poll"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "question": {
+      "type": "string",
+      "required": true
+    },
+    "state": {
+      "type": "enumeration",
+      "required": true,
+      "default": "active",
+      "enum": [
+        "active",
+        "closed"
+      ]
+    },
+    "endsAt": {
+      "type": "datetime"
+    },
+    "multiple": {
+      "type": "boolean",
+      "default": false
+    },
+    "anonymous": {
+      "type": "boolean",
+      "default": true
+    },
+    "options": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::poll-option.poll-option",
+      "mappedBy": "poll"
+    }
+  }
+}

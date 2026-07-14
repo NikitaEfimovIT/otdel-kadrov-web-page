@@ -3,9 +3,13 @@
 # и открытые порты 80 и 443.
 
 {
-	email admin@ВАШ-ДОМЕН.ru
+	# Реальный email для уведомлений Let's Encrypt о продлении.
+	# НЕ ставь @example.com — LE отклоняет такой контакт (ошибка invalidContact).
+	email ВАШ_EMAIL@gmail.com
 }
 
+# Свой домен: заведи A-запись api.ВАШ-ДОМЕН.ru → IP VM.
+# DuckDNS: сабсабдомены НЕ работают — используй голое имя, напр. otdel-kadrov.duckdns.org
 api.ВАШ-ДОМЕН.ru {
 	reverse_proxy strapi:1337
 }
