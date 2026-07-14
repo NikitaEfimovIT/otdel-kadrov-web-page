@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "polls",
+  "info": {
+    "singularName": "poll",
+    "pluralName": "polls",
+    "displayName": "Опросы"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "question": { "type": "string", "required": true },
+    "state": {
+      "type": "enumeration",
+      "enum": ["active", "closed"],
+      "default": "active",
+      "required": true,
+      "description": "active|closed. Имя state, а не status — status зарезервирован в Strapi 5."
+    },
+    "endsAt": { "type": "datetime" },
+    "multiple": { "type": "boolean", "default": false },
+    "anonymous": { "type": "boolean", "default": true },
+    "options": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::poll-option.poll-option",
+      "mappedBy": "poll"
+    }
+  }
+}

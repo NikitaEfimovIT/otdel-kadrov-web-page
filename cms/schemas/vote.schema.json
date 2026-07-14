@@ -1,0 +1,16 @@
+{
+  "kind": "collectionType",
+  "collectionName": "votes",
+  "info": {
+    "singularName": "vote",
+    "pluralName": "votes",
+    "displayName": "Голоса",
+    "description": "Один голос на человека. voterToken — токен устройства (v1) или id пользователя (v2)."
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "voterToken": { "type": "string", "required": true },
+    "poll": { "type": "relation", "relation": "manyToOne", "target": "api::poll.poll", "description": "manyToOne (НЕ oneToOne) — много голосов на один опрос." },
+    "option": { "type": "relation", "relation": "manyToOne", "target": "api::poll-option.poll-option", "description": "manyToOne — много голосов на один вариант." }
+  }
+}

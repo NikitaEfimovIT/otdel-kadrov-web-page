@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "links",
+  "info": {
+    "singularName": "link",
+    "pluralName": "links",
+    "displayName": "Ссылки"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "url": { "type": "string", "required": true },
+    "icon": { "type": "string" },
+    "desc": { "type": "string" },
+    "visible": { "type": "boolean", "default": true },
+    "order": { "type": "integer", "default": 0 }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "kind": "singleType",
+  "collectionName": "raid_progress",
+  "info": {
+    "singularName": "raid-progress",
+    "pluralName": "raid-progresses",
+    "displayName": "Прогресс рейда",
+    "description": "v1 — заполняется вручную. v2 — авто из Raidsmith/WarcraftLogs."
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "raidName": { "type": "string", "default": "Manaforge Omega" },
+    "updatedLabel": { "type": "string", "default": "обновлено сегодня" },
+    "difficulties": { "type": "json", "description": "[{name,killed,total}]" },
+    "bosses": { "type": "json", "description": "[{name,status: killed|push|alive}]" },
+    "mplusBestKey": { "type": "string" },
+    "mplusRating": { "type": "string" },
+    "mplusKeysThisSeason": { "type": "string" }
+  }
+}

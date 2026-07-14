@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "poll_options",
+  "info": {
+    "singularName": "poll-option",
+    "pluralName": "poll-options",
+    "displayName": "Варианты опроса"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "text": { "type": "string", "required": true },
+    "votes": { "type": "integer", "default": 0 },
+    "poll": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::poll.poll",
+      "inversedBy": "options",
+      "description": "manyToOne (НЕ oneToOne!) — парная сторона к poll.options oneToMany."
+    }
+  }
+}

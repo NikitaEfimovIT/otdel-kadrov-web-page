@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "guild_setting",
+  "info": {
+    "singularName": "guild-setting",
+    "pluralName": "guild-settings",
+    "displayName": "Настройки гильдии"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "name": { "type": "string", "required": true, "default": "Отдел кадров" },
+    "region": { "type": "string", "default": "EU · Борейская Тундра" },
+    "faction": { "type": "string", "default": "Альянс" },
+    "slogan": { "type": "text" },
+    "recruitingOpen": { "type": "boolean", "default": true },
+    "showRaidsmith": { "type": "boolean", "default": false }
+  }
+}

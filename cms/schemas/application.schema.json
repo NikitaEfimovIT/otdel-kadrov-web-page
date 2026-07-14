@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "Request",
+  "info": {
+    "singularName": "request",
+    "pluralName": "requests",
+    "displayName": "Заявки",
+    "description": "Заявки на вступление. Public может только создавать (create)."
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "battletag": { "type": "string", "required": true },
+    "wowClass": { "type": "string" },
+    "spec": { "type": "string" },
+    "logsUrl": { "type": "string" },
+    "comment": { "type": "text" },
+    "stage": {
+      "type": "enumeration",
+      "enum": ["new", "reviewing", "accepted", "rejected"],
+      "default": "new",
+      "required": true,
+      "description": "new|reviewing|accepted|rejected. Имя stage, а не status — status зарезервирован в Strapi 5."
+    }
+  }
+}

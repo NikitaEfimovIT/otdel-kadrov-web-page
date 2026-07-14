@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "news_posts",
+  "info": {
+    "singularName": "news-item",
+    "pluralName": "news-items",
+    "displayName": "Новости",
+    "description": "Посты новостей гильдии. Черновик/публикация — через Draft & Publish."
+  },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "excerpt": { "type": "text" },
+    "body": { "type": "richtext" },
+    "tag": {
+      "type": "enumeration",
+      "enum": ["raid", "recruit", "event", "announcement"],
+      "required": true
+    },
+    "date": { "type": "string", "required": true },
+    "views": { "type": "integer", "default": 0 }
+  }
+}

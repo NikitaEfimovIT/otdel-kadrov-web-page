@@ -1,0 +1,16 @@
+{
+  "kind": "collectionType",
+  "collectionName": "roles_recruit",
+  "info": {
+    "singularName": "recruit-role",
+    "pluralName": "recruit-roles",
+    "displayName": "Роли в наборе"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "key": { "type": "string", "required": true, "unique": true },
+    "name": { "type": "string", "required": true },
+    "icon": { "type": "string" },
+    "open": { "type": "boolean", "default": true }
+  }
+}
