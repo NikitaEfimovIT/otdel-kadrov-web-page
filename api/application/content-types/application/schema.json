@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "applications",
+  "info": {
+    "singularName": "application",
+    "pluralName": "applications",
+    "displayName": "Application"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "battletag": {
+      "type": "string",
+      "required": true
+    },
+    "wowClass": {
+      "type": "string"
+    },
+    "spec": {
+      "type": "string"
+    },
+    "logsUrl": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "text"
+    },
+    "stage": {
+      "type": "enumeration",
+      "required": true,
+      "default": "new",
+      "enum": [
+        "new",
+        "reviewing",
+        "accepted",
+        "rejected"
+      ]
+    }
+  }
+}

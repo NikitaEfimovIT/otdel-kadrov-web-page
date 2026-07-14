@@ -1,0 +1,43 @@
+{
+  "kind": "singleType",
+  "collectionName": "guild-settings",
+  "info": {
+    "singularName": "guild-setting",
+    "pluralName": "guild-settings",
+    "displayName": "Guild Setting"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "default": "Отдел кадров",
+      "required": true
+    },
+    "region": {
+      "type": "string",
+      "default": "EU · Борейская Тундра"
+    },
+    "faction": {
+      "type": "string",
+      "default": "Альянс"
+    },
+    "slogan": {
+      "type": "text"
+    },
+    "recruitingOpen": {
+      "type": "boolean",
+      "default": true
+    },
+    "showRaidsmith": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

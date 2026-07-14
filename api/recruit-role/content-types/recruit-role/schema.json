@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recruit-roles",
+  "info": {
+    "singularName": "recruit-role",
+    "pluralName": "recruit-roles",
+    "displayName": "Recruit Role"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "key": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "string"
+    },
+    "open": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

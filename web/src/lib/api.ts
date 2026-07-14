@@ -1,16 +1,17 @@
 // Слой данных. По умолчанию (VITE_API_URL пуст) отдаёт мок-данные,
-// поэтому сайт запускается без бэкенда. Как только укажешь адрес Strapi,
-// эти функции начнут тянуть реальные данные — компоненты менять не нужно.
+// поэтому сайт запускается без бэкенда. Когда указан адрес Strapi —
+// тянет реальные данные, а на пустой/ошибочный ответ мягко падает
+// на дефолты, чтобы страница не ломалась.
 
 import * as mock from "./mock";
 import type {
   GuildSettings, RaidProgress, NewsPost, Poll, PollArchiveItem,
-  GuildLink, RecruitRole, Requirement, PollOption,
+  GuildLink, RecruitRole, Requirement, PollOption, Difficulty, Boss, RoleKey,
 } from "./types";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-/** Обёртка над Strapi REST. Возвращает null → компонент берёт мок-данные. */
+/** Обёртка над Strapi REST. Возвращает null → компонент берёт дефолт. */
 async function fromApi<T>(endpoint: string, map: (json: unknown) => T): Promise<T | null> {
   if (!API_URL) return null;
   try {
@@ -22,23 +23,57 @@ async function fromApi<T>(endpoint: string, map: (json: unknown) => T): Promise<
   }
 }
 
-// Утилита: у Strapi v5 ответ обычно вида { data: [...] } с полями на верхнем уровне.
+/** Ответ Strapi для коллекции: { data: [...] } с полями на верхнем уровне (v5). */
 function rows(json: unknown): Record<string, unknown>[] {
   const data = (json as { data?: unknown })?.data;
   return Array.isArray(data) ? (data as Record<string, unknown>[]) : [];
 }
 
+/** Ответ Strapi для single type: { data: {...} } или { data: null }. */
+function single(json: unknown): Record<string, unknown> | null {
+  const d = (json as { data?: unknown })?.data;
+  return d && typeof d === "object" && !Array.isArray(d) ? (d as Record<string, unknown>) : null;
+}
+
+const str = (v: unknown, fb: string) => (typeof v === "string" && v.length > 0 ? v : fb);
+const bool = (v: unknown, fb: boolean) => (typeof v === "boolean" ? v : fb);
+
+const ROLE_ICON: Record<string, string> = {
+  melee: "swords", ranged: "crosshair", tank: "shield", heal: "heart-pulse",
+};
+
 export async function getGuild(): Promise<GuildSettings> {
-  // Настройки гильдии — single type; для v1 отдаём мок целиком.
-  return mock.guild;
+  const g = await fromApi("guild-setting", single);
+  if (!g) return mock.guild;
+  // Поля из Strapi перекрывают дефолты; статические (stats, chips, hero) остаются из mock.
+  return {
+    ...mock.guild,
+    name: str(g.name, mock.guild.name),
+    region: str(g.region, mock.guild.region),
+    faction: str(g.faction, mock.guild.faction),
+    slogan: str(g.slogan, mock.guild.slogan),
+    recruitingOpen: bool(g.recruitingOpen, mock.guild.recruitingOpen),
+    showRaidsmith: bool(g.showRaidsmith, mock.guild.showRaidsmith),
+  };
 }
 
 export async function getRaidProgress(): Promise<RaidProgress> {
-  return mock.raidProgress;
+  const r = await fromApi("raid-progress", single);
+  if (!r) return mock.raidProgress;
+  return {
+    raidName: str(r.raidName, mock.raidProgress.raidName),
+    updatedLabel: str(r.updatedLabel, mock.raidProgress.updatedLabel),
+    difficulties: Array.isArray(r.difficulties) ? (r.difficulties as Difficulty[]) : mock.raidProgress.difficulties,
+    bosses: Array.isArray(r.bosses) ? (r.bosses as Boss[]) : mock.raidProgress.bosses,
+    mplus: {
+      bestKey: str(r.mplusBestKey, mock.raidProgress.mplus.bestKey),
+      rating: str(r.mplusRating, mock.raidProgress.mplus.rating),
+      keysThisSeason: str(r.mplusKeysThisSeason, mock.raidProgress.mplus.keysThisSeason),
+    },
+  };
 }
 
 export async function getNews(): Promise<NewsPost[]> {
-  // В Strapi 5 REST по умолчанию отдаёт только опубликованные записи — фильтр по статусу не нужен.
   const mapped = await fromApi("news-items?sort=date:desc", (json) =>
     rows(json).map((d) => ({
       id: Number(d.id),
@@ -48,7 +83,7 @@ export async function getNews(): Promise<NewsPost[]> {
       date: String(d.date ?? ""),
     })),
   );
-  return mapped ?? mock.news;
+  return mapped && mapped.length > 0 ? mapped : mock.news;
 }
 
 export async function getActivePoll(): Promise<Poll> {
@@ -58,7 +93,7 @@ export async function getActivePoll(): Promise<Poll> {
     const options = Array.isArray(first.options)
       ? (first.options as Record<string, unknown>[]).map<PollOption>((o) => ({
           id: Number(o.id),
-          label: String(o.text ?? o.label ?? ""),
+          label: String(o.text ?? ""),
           votes: Number(o.votes ?? 0),
         }))
       : [];
@@ -68,7 +103,20 @@ export async function getActivePoll(): Promise<Poll> {
 }
 
 export async function getPollArchive(): Promise<PollArchiveItem[]> {
-  return mock.pollArchive;
+  const mapped = await fromApi("polls?filters[state][$eq]=closed&populate=options&sort=updatedAt:desc", (json) =>
+    rows(json).map<PollArchiveItem>((p) => {
+      const opts = Array.isArray(p.options) ? (p.options as Record<string, unknown>[]) : [];
+      const total = opts.reduce((a, o) => a + Number(o.votes ?? 0), 0);
+      const top = [...opts].sort((a, b) => Number(b.votes ?? 0) - Number(a.votes ?? 0))[0];
+      const pct = top && total > 0 ? Math.round((Number(top.votes ?? 0) / total) * 100) : 0;
+      return {
+        id: Number(p.id),
+        question: String(p.question ?? ""),
+        result: top ? `${String(top.text ?? "")} · ${pct}%` : "—",
+      };
+    }),
+  );
+  return mapped ?? mock.pollArchive;
 }
 
 export async function getLinks(): Promise<GuildLink[]> {
@@ -81,14 +129,27 @@ export async function getLinks(): Promise<GuildLink[]> {
       url: String(d.url ?? "#"),
     })),
   );
-  return mapped ?? mock.links;
+  return mapped && mapped.length > 0 ? mapped : mock.links;
 }
 
 export async function getRoles(): Promise<RecruitRole[]> {
-  return mock.roles;
+  const mapped = await fromApi("recruit-roles?sort=key:asc", (json) =>
+    rows(json).map<RecruitRole>((d) => {
+      const key = String(d.key ?? "") as RoleKey;
+      return {
+        key,
+        name: String(d.name ?? ""),
+        icon: String(d.icon || ROLE_ICON[key] || "swords"),
+        open: Boolean(d.open),
+      };
+    }),
+  );
+  return mapped && mapped.length > 0 ? mapped : mock.roles;
 }
 
 export async function getRequirements(): Promise<Requirement[]> {
+  // Отдельного типа в Strapi нет — статический контент.
+  // При желании позже заведём тип/поле и подключим сюда.
   return mock.requirements;
 }
 

@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "news-items",
+  "info": {
+    "singularName": "news-item",
+    "pluralName": "news-items",
+    "displayName": "News Item"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "excerpt": {
+      "type": "text"
+    },
+    "body": {
+      "type": "blocks"
+    },
+    "tag": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "raid",
+        "recruit",
+        "event",
+        "announcement"
+      ]
+    },
+    "date": {
+      "type": "string",
+      "required": true
+    },
+    "views": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

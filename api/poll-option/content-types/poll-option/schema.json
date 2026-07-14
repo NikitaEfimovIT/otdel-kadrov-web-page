@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "poll-options",
+  "info": {
+    "singularName": "poll-option",
+    "pluralName": "poll-options",
+    "displayName": "Poll Option"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    },
+    "votes": {
+      "type": "integer",
+      "default": 0
+    },
+    "poll": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::poll.poll",
+      "inversedBy": "options"
+    }
+  }
+}
