@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bosses",
+  "info": {
+    "singularName": "boss",
+    "pluralName": "bosses",
+    "displayName": "Босс"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "state": {
+      "type": "enumeration",
+      "enum": ["killed", "push", "alive"],
+      "default": "alive",
+      "required": true,
+      "description": "killed|push|alive. Имя state, а не status — status зарезервирован в Strapi 5."
+    },
+    "order": { "type": "integer", "default": 0 },
+    "raid": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::raid.raid",
+      "inversedBy": "bosses"
+    }
+  }
+}

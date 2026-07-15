@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "raids",
+  "info": {
+    "singularName": "raid",
+    "pluralName": "raids",
+    "displayName": "Рейд"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "current": {
+      "type": "boolean",
+      "default": false,
+      "description": "Какой рейд показывать на сайте (должен быть true ровно у одного)."
+    },
+    "updatedLabel": { "type": "string" },
+    "normalKilled": { "type": "integer", "default": 0 },
+    "normalTotal": { "type": "integer", "default": 0 },
+    "heroicKilled": { "type": "integer", "default": 0 },
+    "heroicTotal": { "type": "integer", "default": 0 },
+    "mythicKilled": { "type": "integer", "default": 0 },
+    "mythicTotal": { "type": "integer", "default": 0 },
+    "mplusBestKey": { "type": "string" },
+    "mplusRating": { "type": "string" },
+    "mplusKeysThisSeason": { "type": "string" },
+    "bosses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::boss.boss",
+      "mappedBy": "raid"
+    }
+  }
+}

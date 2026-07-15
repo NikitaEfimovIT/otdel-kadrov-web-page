@@ -6,7 +6,7 @@
 import * as mock from "./mock";
 import type {
   GuildSettings, RaidProgress, NewsPost, Poll, PollArchiveItem,
-  GuildLink, RecruitRole, Requirement, PollOption, Difficulty, Boss, RoleKey,
+  GuildLink, RecruitRole, Requirement, PollOption, Difficulty, Boss, BossStatus, RoleKey,
 } from "./types";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -58,17 +58,37 @@ export async function getGuild(): Promise<GuildSettings> {
 }
 
 export async function getRaidProgress(): Promise<RaidProgress> {
-  const r = await fromApi("raid-progress", single);
-  if (!r) return mock.raidProgress;
+  // Текущий рейд (current=true) вместе с боссами (relation Raid 1—* Boss).
+  const raid = await fromApi(
+    "raids?filters[current][$eq]=true&populate=bosses",
+    (json) => rows(json)[0] ?? null,
+  );
+  if (!raid) return mock.raidProgress;
+
+  const bossesRaw = Array.isArray(raid.bosses) ? (raid.bosses as Record<string, unknown>[]) : [];
+  const bosses: Boss[] = [...bossesRaw]
+    .sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+    .map((b) => ({ name: String(b.name ?? ""), status: (b.state as BossStatus) || "alive" }));
+
+  const diff = (name: string, killed: unknown, total: unknown): Difficulty => ({
+    name,
+    killed: Number(killed ?? 0),
+    total: Number(total ?? 0),
+  });
+
   return {
-    raidName: str(r.raidName, mock.raidProgress.raidName),
-    updatedLabel: str(r.updatedLabel, mock.raidProgress.updatedLabel),
-    difficulties: Array.isArray(r.difficulties) ? (r.difficulties as Difficulty[]) : mock.raidProgress.difficulties,
-    bosses: Array.isArray(r.bosses) ? (r.bosses as Boss[]) : mock.raidProgress.bosses,
+    raidName: str(raid.name, mock.raidProgress.raidName),
+    updatedLabel: str(raid.updatedLabel, mock.raidProgress.updatedLabel),
+    difficulties: [
+      diff("Normal", raid.normalKilled, raid.normalTotal),
+      diff("Heroic", raid.heroicKilled, raid.heroicTotal),
+      diff("Mythic", raid.mythicKilled, raid.mythicTotal),
+    ],
+    bosses: bosses.length > 0 ? bosses : mock.raidProgress.bosses,
     mplus: {
-      bestKey: str(r.mplusBestKey, mock.raidProgress.mplus.bestKey),
-      rating: str(r.mplusRating, mock.raidProgress.mplus.rating),
-      keysThisSeason: str(r.mplusKeysThisSeason, mock.raidProgress.mplus.keysThisSeason),
+      bestKey: str(raid.mplusBestKey, mock.raidProgress.mplus.bestKey),
+      rating: str(raid.mplusRating, mock.raidProgress.mplus.rating),
+      keysThisSeason: str(raid.mplusKeysThisSeason, mock.raidProgress.mplus.keysThisSeason),
     },
   };
 }
