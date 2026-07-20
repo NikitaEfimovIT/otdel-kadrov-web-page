@@ -1,0 +1,64 @@
+/* Кабинет офицера — использует токены из tokens.css (global.css уже импортирован). */
+
+.adm { height: 100vh; display: flex; overflow: hidden; background: var(--bg); color: var(--text); }
+.adm-main { flex: 1; height: 100%; overflow-y: auto; }
+.adm-main::-webkit-scrollbar { width: 10px; }
+.adm-main::-webkit-scrollbar-thumb { background: #241d3a; border-radius: 99px; border: 2px solid var(--bg); }
+.adm-inner { max-width: 1080px; margin: 0 auto; padding: 36px 40px 80px; }
+
+.adm-kicker { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.adm-h1 { font-weight: 800; font-size: 34px; letter-spacing: -0.025em; margin: 0; }
+.adm-sub { color: var(--muted); font-size: 15px; margin: 4px 0 30px; }
+.adm-label { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+
+/* Sidebar */
+.sb { width: 256px; flex-shrink: 0; height: 100%; border-right: 1px solid var(--line2); background: var(--bg2); display: flex; flex-direction: column; padding: 22px 16px; }
+.sb-btn { display: flex; align-items: center; gap: 11px; padding: 11px 12px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--muted); font-size: 14.5px; font-weight: 600; cursor: pointer; text-align: left; width: 100%; transition: color 0.15s ease, background-color 0.15s ease; }
+.sb-btn:hover { color: var(--text); }
+.sb-btn.active { background: var(--soft); color: var(--accent); border-color: var(--line); }
+.sb-badge { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 10px; padding: 2px 7px; border-radius: 6px; background: var(--line2); color: var(--muted); }
+.sb-badge--accent { background: var(--soft); color: var(--accent); }
+
+.icon-btn { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line2); background: transparent; color: var(--muted); cursor: pointer; border-radius: 9px; transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease; }
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.icon-btn--green:hover { border-color: var(--green); color: var(--green); background: rgba(71, 209, 71, 0.1); }
+.icon-btn--red:hover { border-color: var(--red); color: var(--red); background: rgba(255, 107, 107, 0.1); }
+
+/* Cards / stats */
+.adm-card { padding: 24px; border: 1px solid var(--line2); border-radius: 16px; background: linear-gradient(160deg, var(--surface), var(--surface2)); }
+.adm-card--accent { border: 1px solid var(--line); }
+.adm-stat { padding: 20px; border: 1px solid var(--line2); border-radius: 16px; background: linear-gradient(160deg, var(--surface), var(--surface2)); }
+.adm-stat--accent { border: 1px solid var(--line); background: var(--soft); }
+.adm-stat__num { font-weight: 800; font-size: 32px; margin-top: 8px; }
+.adm-stat__label { display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 1px; color: var(--muted); }
+
+/* Tables */
+.adm-table { border: 1px solid var(--line2); border-radius: 16px; overflow: hidden; background: var(--surface); }
+.adm-thead, .adm-trow { display: grid; gap: 16px; padding: 14px 22px; border-bottom: 1px solid var(--line2); align-items: center; }
+.adm-thead { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
+.adm-trow { padding: 16px 22px; transition: background-color 0.15s ease; }
+.adm-trow:last-child { border-bottom: none; }
+.adm-trow--click { cursor: pointer; }
+.adm-trow--click:hover { background: var(--soft); }
+
+/* Toggle */
+.toggle { width: 42px; height: 24px; border-radius: 99px; background: var(--line2); position: relative; cursor: pointer; flex-shrink: 0; border: none; padding: 0; transition: background-color 0.2s ease; }
+.toggle.on { background: var(--accent); }
+.toggle__knob { width: 18px; height: 18px; border-radius: 50%; background: var(--muted); position: absolute; top: 3px; left: 3px; transition: left 0.2s ease, background-color 0.2s ease; }
+.toggle.on .toggle__knob { background: #fff; left: 21px; }
+
+.link-lite { color: var(--muted); cursor: pointer; }
+.link-lite:hover { color: var(--accent); }
+
+.adm-input { padding: 13px 15px; border-radius: 11px; border: 1px solid var(--line2); background: var(--bg); color: var(--text); font-size: 15px; outline: none; transition: border-color 0.15s ease; width: 100%; }
+.adm-input:focus { border-color: var(--accent); }
+.adm-input--sm { padding: 11px 13px; border-radius: 10px; font-size: 14px; }
+textarea.adm-input { resize: vertical; line-height: 1.6; }
+
+.adm-flash { padding: 11px 15px; border-radius: 10px; font-size: 13px; border: 1px solid var(--line2); }
+.adm-flash--ok { border-color: rgba(71, 209, 71, 0.4); background: rgba(71, 209, 71, 0.08); color: var(--green); }
+.adm-flash--err { border-color: rgba(255, 107, 107, 0.4); background: rgba(255, 107, 107, 0.08); color: var(--red); }
+
+/* Login */
+.adm-login { position: fixed; inset: 0; z-index: 100; background: radial-gradient(120% 90% at 50% 0%, #14102a 0%, #07060f 70%); display: flex; align-items: center; justify-content: center; padding: 40px; }
+.adm-login__card { position: relative; width: 100%; max-width: 400px; padding: 40px 36px; border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(160deg, var(--surface), var(--surface2)); box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6); }

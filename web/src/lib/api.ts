@@ -94,7 +94,7 @@ export async function getRaidProgress(): Promise<RaidProgress> {
 }
 
 export async function getNews(): Promise<NewsPost[]> {
-  const mapped = await fromApi("news-items?sort=date:desc", (json) =>
+  const mapped = await fromApi("news-items?filters[published][$eq]=true&sort=date:desc", (json) =>
     rows(json).map((d) => ({
       id: Number(d.id),
       title: String(d.title ?? ""),
