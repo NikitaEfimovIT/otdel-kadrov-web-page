@@ -13,14 +13,8 @@ export function About({ guild }: { guild: GuildSettings }) {
             Полу-хардкор
             <br />с человеческим лицом
           </h2>
-          <p className="lead" style={{ marginBottom: 16 }}>
-            Берём кромку в рейдах — уверенный Heroic и заход в Mythic, — и закрываем высокие ключи
-            M+. Без токсичности, пафоса и элитарного гейткипинга.
-          </p>
-          <p className="lead" style={{ marginBottom: 28 }}>
-            Здесь умеют играть, но с людьми комфортно. Приходишь ради прогресса — остаёшься ради
-            компании.
-          </p>
+          <p className="lead" style={{ marginBottom: 16 }}>{guild.aboutText1}</p>
+          <p className="lead" style={{ marginBottom: 28 }}>{guild.aboutText2}</p>
           <div className="chips">
             {guild.chips.map((c) => (
               <span key={c} className="chip">

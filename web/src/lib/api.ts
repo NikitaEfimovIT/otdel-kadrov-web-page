@@ -45,7 +45,19 @@ const ROLE_ICON: Record<string, string> = {
 export async function getGuild(): Promise<GuildSettings> {
   const g = await fromApi("guild-setting", single);
   if (!g) return mock.guild;
-  // Поля из Strapi перекрывают дефолты; статические (stats, chips, hero) остаются из mock.
+
+  const ms = mock.guild.stats; // [основаны, рейдов/нед, расписание, штат]
+  const raidDays = str(g.raidDays, ms[2].value);
+  const raidTime = str(g.raidTime, ms[2].label);
+  const rosterSize = str(g.rosterSize, ms[3].value);
+  const rosterFilled = str(g.rosterFilled, "24");
+  const online = str(g.onlineCount, "6");
+
+  const chipsStr = typeof g.chips === "string" ? g.chips : "";
+  const chips = chipsStr.trim()
+    ? chipsStr.split(",").map((c) => c.trim()).filter(Boolean)
+    : mock.guild.chips;
+
   return {
     ...mock.guild,
     name: str(g.name, mock.guild.name),
@@ -54,6 +66,19 @@ export async function getGuild(): Promise<GuildSettings> {
     slogan: str(g.slogan, mock.guild.slogan),
     recruitingOpen: bool(g.recruitingOpen, mock.guild.recruitingOpen),
     showRaidsmith: bool(g.showRaidsmith, mock.guild.showRaidsmith),
+    aboutText1: str(g.aboutText1, mock.guild.aboutText1),
+    aboutText2: str(g.aboutText2, mock.guild.aboutText2),
+    chips,
+    stats: [
+      { value: str(g.foundedYear, ms[0].value), label: "ОСНОВАНЫ", accent: true },
+      { value: str(g.raidsPerWeek, ms[1].value), label: "РЕЙДА В НЕДЕЛЮ", accent: true },
+      { value: raidDays, label: raidTime },
+      { value: rosterSize, label: "ЧЕЛОВЕК В ШТАТЕ" },
+    ],
+    hero: {
+      ...mock.guild.hero,
+      staff: { value: `${rosterFilled}/${rosterSize}`, sub: `${online} онлайн` },
+    },
   };
 }
 

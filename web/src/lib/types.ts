@@ -103,6 +103,8 @@ export interface GuildSettings {
   slogan: string;
   recruitingOpen: boolean;
   showRaidsmith: boolean;
+  aboutText1: string;
+  aboutText2: string;
   chips: string[];
   stats: GuildStat[];
   hero: {

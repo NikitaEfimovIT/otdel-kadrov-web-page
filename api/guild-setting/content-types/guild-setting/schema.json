@@ -38,6 +38,16 @@
     "showRaidsmith": {
       "type": "boolean",
       "default": false
-    }
+    },
+    "foundedYear": { "type": "string", "default": "2019" },
+    "raidsPerWeek": { "type": "string", "default": "2" },
+    "raidDays": { "type": "string", "default": "Ср/Вс" },
+    "raidTime": { "type": "string", "default": "20:00–23:00 CET" },
+    "rosterSize": { "type": "string", "default": "30" },
+    "rosterFilled": { "type": "string", "default": "24" },
+    "onlineCount": { "type": "string", "default": "6" },
+    "chips": { "type": "text", "default": "Кромка в рейдах, Высокие ключи M+, Без токсичности, Ржём в войсе" },
+    "aboutText1": { "type": "text" },
+    "aboutText2": { "type": "text" }
   }
 }
