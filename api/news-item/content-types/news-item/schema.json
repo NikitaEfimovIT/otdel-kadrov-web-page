@@ -7,7 +7,7 @@
     "displayName": "News Item"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {
     "i18n": {
@@ -42,6 +42,10 @@
     "views": {
       "type": "integer",
       "default": 0
+    },
+    "published": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
